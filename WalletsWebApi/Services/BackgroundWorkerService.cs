@@ -30,7 +30,7 @@ namespace WalletsWebApi.Services
             {
                 var sw = Stopwatch.StartNew();
                 IEnumerable<Wallet> wallets;
-                IEnumerable<TmpBalance> tmpBalances = Enumerable.Empty<TmpBalance>();
+                List<TmpBalance> tmpBalances = new List<TmpBalance>();
                 _logger.LogInformation($"BackgroundWorkerService started at: {DateTime.Now}");
                 using (var scope = _serviceProvider.CreateScope())
                 {
@@ -40,30 +40,40 @@ namespace WalletsWebApi.Services
                     int counter = 0;
                     foreach (var wallet in wallets)
                     {
+                        if (wallet.TmpBalance == null)
+                        {
+                            var tmpBalance = new TmpBalance()
+                            {
+                                Balance = null,
+                                Updated_At = DateTime.UtcNow,
+                                WalletId = wallet.Id
+                            };
+                            tmpBalances.Add(tmpBalance);
+                        }
+                    }
+                    if (tmpBalances.Count > 0)
+                        await tpmBalanceService.AddRangeAsync(tmpBalances);
+                    foreach (var wallet in wallets)
+                    {
                         if (wallet.Address != null)
                         {
                             var balance = await _web3Service.GetBalance(wallet.Address);
                             var tmpBalance = new TmpBalance()
                             {
+                                Id = wallet.TmpBalance.Id,
                                 Balance = balance,
                                 Updated_At = DateTime.UtcNow,
                                 WalletId = wallet.Id
                             };
-                            if (wallet.TmpBalance == null)
-                            {
-                                tmpBalances.Append(tmpBalance);
-                            }
                             wallet.TmpBalance = tmpBalance;
                         }
                         counter++;
                         if (counter == 100)
                         {
-                            await tpmBalanceService.AddRangeAsync(tmpBalances);
                             await walletService.UpdateRangeAsync(wallets);
                             counter = 0;
                         }
                     }
-                    await tpmBalanceService.AddRangeAsync(tmpBalances);
                     await walletService.UpdateRangeAsync(wallets);
                 }
                 _logger.LogInformation($"Task execution time: {sw.Elapsed}");

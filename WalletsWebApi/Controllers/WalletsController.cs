@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WalletsWebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WalletsController : ControllerBase
     {
         private readonly IWalletService _service;

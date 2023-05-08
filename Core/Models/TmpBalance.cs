@@ -5,7 +5,6 @@ namespace Core.Models
 {
     public class TmpBalance
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Column(TypeName = "decimal(40,20)")]
