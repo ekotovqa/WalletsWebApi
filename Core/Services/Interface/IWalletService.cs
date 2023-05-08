@@ -5,6 +5,7 @@ namespace Core.Services.Interface
     public interface IWalletService
     {
         Task<IEnumerable<Wallet>> GetAsync();
-        Task<bool> UpdateRangeAsync(IEnumerable<Wallet> updatedWallets);
+        Task<bool> UpdateWalletsRangeAsync(IEnumerable<Wallet> updatedWallets);
+        Task AddTmpBalancesRangeAsync(IEnumerable<TmpBalance> tmpBalances);
     }
 }

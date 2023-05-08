@@ -35,7 +35,6 @@ namespace WalletsWebApi.Services
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var walletService = scope.ServiceProvider.GetRequiredService<IWalletService>();
-                    var tpmBalanceService = scope.ServiceProvider.GetRequiredService<ITmpBalanceService>();
                     wallets = await walletService.GetAsync();
                     int counter = 0;
                     foreach (var wallet in wallets)
@@ -52,7 +51,7 @@ namespace WalletsWebApi.Services
                         }
                     }
                     if (tmpBalances.Count > 0)
-                        await tpmBalanceService.AddRangeAsync(tmpBalances);
+                        await walletService.AddTmpBalancesRangeAsync(tmpBalances);
                     foreach (var wallet in wallets)
                     {
                         if (wallet.Address != null)
@@ -70,11 +69,11 @@ namespace WalletsWebApi.Services
                         counter++;
                         if (counter == 100)
                         {
-                            await walletService.UpdateRangeAsync(wallets);
+                            await walletService.UpdateWalletsRangeAsync(wallets);
                             counter = 0;
                         }
                     }
-                    await walletService.UpdateRangeAsync(wallets);
+                    await walletService.UpdateWalletsRangeAsync(wallets);
                 }
                 _logger.LogInformation($"Task execution time: {sw.Elapsed}");
                 await Task.Delay(TimeSpan.FromMinutes(taskDelay), stoppingToken);

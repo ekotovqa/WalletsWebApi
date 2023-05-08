@@ -17,7 +17,7 @@ namespace Core.Services
 
         public async Task<IEnumerable<Wallet>> GetAsync() => await _context.Wallets.Include(x => x.TmpBalance).ToListAsync();
 
-        public async Task<bool> UpdateRangeAsync(IEnumerable<Wallet> updatedWallets)
+        public async Task<bool> UpdateWalletsRangeAsync(IEnumerable<Wallet> updatedWallets)
         {
             var wallets = await GetAsync();
             foreach (var wallet in wallets)
@@ -30,6 +30,12 @@ namespace Core.Services
             }
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task AddTmpBalancesRangeAsync(IEnumerable<TmpBalance> tmpBalances)
+        {
+            await _context.TmpBalances.AddRangeAsync(tmpBalances);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -16,7 +16,6 @@ builder.Services.AddDbContext<DatabaseContext>(option => option.UseNpgsql(builde
 builder.Services.AddHostedService<BackgroundWorkerService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IWalletService, WalletService>();
-builder.Services.AddScoped<ITmpBalanceService, TmpBalanceService>();
 builder.Services.AddSingleton<IWeb3Service, Web3Service>();
 
 var app = builder.Build();
