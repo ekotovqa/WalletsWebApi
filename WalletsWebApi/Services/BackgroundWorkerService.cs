@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using Core.Services.Interface;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using WalletsWebApi.Services.Interface;
 
@@ -10,22 +11,19 @@ namespace WalletsWebApi.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<BackgroundWorkerService> _logger;
         private readonly IWeb3Service _web3Service;
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<AppSettings> _options;
 
 
-        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IServiceProvider serviceProvider, IWeb3Service web3Service, IConfiguration configuration)
+        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IServiceProvider serviceProvider, IWeb3Service web3Service, IOptions<AppSettings> options)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
             _web3Service = web3Service;
-            _configuration = configuration;
+            _options = options;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            int taskDelay = 0;
-            if (!string.IsNullOrEmpty(_configuration["BackgroundWorkerServiceTaskDelay"]))
-                int.TryParse(_configuration["BackgroundWorkerServiceTaskDelay"], out taskDelay);
             while (!stoppingToken.IsCancellationRequested)
             {
                 var sw = Stopwatch.StartNew();
@@ -76,7 +74,7 @@ namespace WalletsWebApi.Services
                     await walletService.UpdateWalletsRangeAsync(wallets);
                 }
                 _logger.LogInformation($"Task execution time: {sw.Elapsed}");
-                await Task.Delay(TimeSpan.FromMinutes(taskDelay), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(_options.Value.BackgroundWorkerServiceTaskDelay), stoppingToken);
             }
         }
 

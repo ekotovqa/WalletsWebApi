@@ -1,22 +1,23 @@
-﻿using Nethereum.Web3;
+﻿using Microsoft.Extensions.Options;
+using Nethereum.Web3;
 using WalletsWebApi.Services.Interface;
 
 namespace WalletsWebApi.Services
 {
     public class Web3Service : IWeb3Service
     {
+        private readonly IOptions<AppSettings> _options; 
         private readonly ILogger<Web3Service> _logger;
-        private readonly IConfiguration _configuration;
         private string _webEndpoint;
-        public Web3Service(ILogger<Web3Service> logger, IConfiguration configuration)
+        public Web3Service(ILogger<Web3Service> logger, IOptions<AppSettings> options)
         {
             _logger = logger;
-            _configuration = configuration;
+            _options = options;
         }
 
         public async Task<decimal?> GetBalance(string web3Address)
         {
-            _webEndpoint = _configuration["Web3Endpoint"];
+            _webEndpoint = _options.Value.Web3Endpoint;
             if (!string.IsNullOrEmpty(_webEndpoint))
             {
                 try
