@@ -45,7 +45,7 @@ namespace WalletsWebApi.Services
                             var tmpBalance = new TmpBalance()
                             {
                                 Balance = null,
-                                Updated_At = DateTime.UtcNow,
+                                UpdatedAt = DateTime.UtcNow,
                                 WalletId = wallet.Id
                             };
                             tmpBalances.Add(tmpBalance);
@@ -62,7 +62,7 @@ namespace WalletsWebApi.Services
                             {
                                 Id = wallet.TmpBalance.Id,
                                 Balance = balance,
-                                Updated_At = DateTime.UtcNow,
+                                UpdatedAt = DateTime.UtcNow,
                                 WalletId = wallet.Id
                             };
                             wallet.TmpBalance = tmpBalance;

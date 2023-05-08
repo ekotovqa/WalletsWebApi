@@ -11,6 +11,6 @@ namespace Core.Dto.ViewModels
         public int Id { get; set; }
         public string Address { get; set; }
         public decimal? Balance { get; set; }
-        public DateTime Updated_At { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

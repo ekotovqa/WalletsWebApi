@@ -9,7 +9,7 @@ namespace Core.Dto.Mapping
         public MappingProfile()
         {
             CreateMap<Wallet, WalletViewModel>().ForMember(walletViewModel => walletViewModel.Balance, expression => expression.MapFrom(wallet => wallet.TmpBalance.Balance))
-                .ForMember(walletViewModel => walletViewModel.Updated_At, expression => expression.MapFrom(wallet => wallet.TmpBalance.Updated_At));
+                .ForMember(walletViewModel => walletViewModel.UpdatedAt, expression => expression.MapFrom(wallet => wallet.TmpBalance.UpdatedAt));
         }
     }
 }

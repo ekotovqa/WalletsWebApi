@@ -19,10 +19,10 @@ namespace WalletsWebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<List<WalletViewModel>>Get()
         {
             var wallets = await _service.GetAsync();
-            return Ok(_mapper.Map<List<WalletViewModel>>(wallets));
+            return _mapper.Map<List<WalletViewModel>>(wallets.ToList());
         }
     }
 }

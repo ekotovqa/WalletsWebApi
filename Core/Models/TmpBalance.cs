@@ -9,7 +9,7 @@ namespace Core.Models
 
         [Column(TypeName = "decimal(40,20)")]
         public decimal? Balance { get; set; }
-        public DateTime Updated_At { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public Wallet Wallets { get; set; }
         public int WalletId { get; set; }
     }
