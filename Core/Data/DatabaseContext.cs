@@ -12,10 +12,11 @@ namespace Core.Data
         public DbSet<TmpBalance> TmpBalances { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Wallet>()
-                .ToTable("Wallets", t => t.ExcludeFromMigrations());
-        }
+        //Required to create a migration without considering the Wallets table
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Wallet>()
+        //        .ToTable("Wallets", t => t.ExcludeFromMigrations());
+        //}
     }
 }
